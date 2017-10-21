@@ -1,0 +1,10 @@
+{
+  "/fileInfoes": {
+    "target": "http://localhost:8080",
+    "secure": false
+  },
+  "/info": {
+    "target": "http://localhost:8080",
+    "secure": false
+  }
+}
