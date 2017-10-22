@@ -14,6 +14,7 @@ export class FileInfoService {
 
   getFileInfos(pageNum: number): Observable<FileSearchResult> {
     let params: URLSearchParams = new URLSearchParams();
+    params.set('sort', 'fileName');
     params.set('page', String(pageNum));
     let options = new RequestOptions();
     options.params = params;

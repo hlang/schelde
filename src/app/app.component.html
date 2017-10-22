@@ -6,15 +6,19 @@
   <mat-table #table [dataSource]="fileInfoDs">
 
     <ng-container matColumnDef="fileName">
-      <mat-header-cell *matHeaderCellDef> FileName</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>FileName</mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.fileName}}</mat-cell>
     </ng-container>
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.fileSize}}</mat-cell>
+    </ng-container>
     <ng-container matColumnDef="time">
-      <mat-header-cell *matHeaderCellDef> Time</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.modTime}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.modTime | date:'MM.dd.y HH:mm:ss'}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="Download">
-      <mat-header-cell *matHeaderCellDef> Download</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Download</mat-header-cell>
       <mat-cell *matCellDef="let row">DL</mat-cell>
     </ng-container>
 
@@ -23,7 +27,7 @@
 
   </mat-table>
   <mat-paginator #paginator
-                 [pageSizeOptions]="[5, 10, 25, 100]"
+
                  (page)="onPageEvent($event)">
   </mat-paginator>
 </div>

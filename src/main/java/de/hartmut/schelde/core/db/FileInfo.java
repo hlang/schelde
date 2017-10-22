@@ -30,58 +30,68 @@ import java.util.Objects;
 @Entity
 public class FileInfo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String fileName;
-    private Timestamp modTime;
-    private String path;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
+  private String fileName;
+  private Long fileSize;
+  private Timestamp modTime;
+  private String path;
 
-    public long getId() {
-        return id;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public String getFileName() {
-        return fileName;
-    }
+  public String getFileName() {
+    return fileName;
+  }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
 
-    public Timestamp getModTime() {
-        return modTime;
-    }
+  public Timestamp getModTime() {
+    return modTime;
+  }
 
-    public void setModTime(Timestamp modTime) {
-        this.modTime = modTime;
-    }
+  public void setModTime(Timestamp modTime) {
+    this.modTime = modTime;
+  }
 
-    public String getPath() {
-        return path;
-    }
+  public String getPath() {
+    return path;
+  }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+  public void setPath(String path) {
+    this.path = path;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FileInfo fileInfo = (FileInfo) o;
-        return Objects.equals(fileName, fileInfo.fileName) &&
-                Objects.equals(modTime, fileInfo.modTime) &&
-                Objects.equals(path, fileInfo.path);
-    }
+  public Long getFileSize() {
+    return fileSize;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(fileName, modTime, path);
-    }
+  public void setFileSize(Long fileSize) {
+    this.fileSize = fileSize;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    FileInfo fileInfo = (FileInfo) o;
+    return Objects.equals(fileName, fileInfo.fileName) &&
+      Objects.equals(fileSize, fileInfo.fileSize) &&
+      Objects.equals(modTime, fileInfo.modTime) &&
+      Objects.equals(path, fileInfo.path);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(fileName, fileSize, modTime, path);
+  }
 }
 

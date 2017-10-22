@@ -78,8 +78,9 @@ public class FileLoader implements Runnable {
 
 
         fileInfos.forEach(fileInfo ->
-                LOGGER.debug("{} {} {}",
+          LOGGER.debug("{} {} {} {}",
                         fileInfo.getFileName(),
+            fileInfo.getFileSize(),
                         fileInfo.getModTime(),
                         fileInfo.getPath())
         );
@@ -98,6 +99,7 @@ public class FileLoader implements Runnable {
                     LOGGER.trace("file: {}", path);
                     FileInfo fileInfo = new FileInfo();
                     fileInfo.setFileName(path.getFileName().toString());
+                  fileInfo.setFileSize(Files.size(path));
                     fileInfo.setModTime(
                             Timestamp.from(Files.getLastModifiedTime(path).toInstant()));
                     fileInfo.setPath(path.toAbsolutePath().toString());
