@@ -9,17 +9,19 @@
       <mat-header-cell *matHeaderCellDef>FileName</mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.fileName}}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="size">
-      <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.fileSize}}</mat-cell>
-    </ng-container>
     <ng-container matColumnDef="time">
       <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.modTime | date:'MM.dd.y HH:mm:ss'}}</mat-cell>
     </ng-container>
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.fileSize}}</mat-cell>
+    </ng-container>
     <ng-container matColumnDef="Download">
       <mat-header-cell *matHeaderCellDef>Download</mat-header-cell>
-      <mat-cell *matCellDef="let row">DL</mat-cell>
+      <mat-cell *matCellDef="let row">
+        <span class="fa fa-download" aria-label="download"></span>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

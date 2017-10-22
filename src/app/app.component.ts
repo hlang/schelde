@@ -12,7 +12,7 @@ import {FileInfoDataSource} from "./file-info-data-source";
 export class AppComponent implements OnInit {
   title = 'Schelde!';
   searchResult: FileSearchResult | null;
-  displayedColumns = ['fileName', 'size', 'time', 'Download'];
+  displayedColumns = ['fileName', 'time', 'size', 'Download'];
   fileInfoDs: FileInfoDataSource | null;
 
   constructor(private fileInfoService: FileInfoService) {
