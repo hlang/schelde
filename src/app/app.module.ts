@@ -5,24 +5,26 @@ import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {FileInfoService} from "./file-info.service";
-import {MatPaginatorModule, MatTableModule} from "@angular/material";
+import {MatButtonModule, MatPaginatorModule, MatTableModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    BrowserAnimationsModule,
-    MatTableModule,
-    MatPaginatorModule
-  ],
-  providers: [
-    FileInfoService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpModule,
+        BrowserAnimationsModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatButtonModule
+    ],
+    providers: [
+        FileInfoService
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

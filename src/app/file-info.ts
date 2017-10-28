@@ -4,4 +4,5 @@ export class FileInfo {
   fileSize: string;
   modTime: string;
   path: string;
+    id: string;
 }

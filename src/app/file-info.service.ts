@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Http, RequestOptions, Response, URLSearchParams} from "@angular/http";
+import {Http, RequestOptions, Response, ResponseContentType, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs";
 import {FileSearchResult} from "./file-search-result";
 import "rxjs/add/operator/map";
+import {FileInfo} from "./file-info";
+
 
 @Injectable()
 export class FileInfoService {
@@ -11,6 +13,7 @@ export class FileInfoService {
   }
 
   private fileInfoUrl = 'fileInfoes';
+    private downloadUrl = 'download/file/';
 
   getFileInfos(pageNum: number): Observable<FileSearchResult> {
     let params: URLSearchParams = new URLSearchParams();
@@ -23,6 +26,11 @@ export class FileInfoService {
       .map(res => this.extractData(res));
 
   }
+
+    downloadFile(file: FileInfo): Observable<Blob> {
+        return this.http.get(this.downloadUrl + file.id, {responseType: ResponseContentType.Blob})
+            .map(res => res.blob());
+    }
 
   private extractData(res: Response): FileSearchResult {
     let body = res.json();

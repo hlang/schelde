@@ -3,6 +3,8 @@ import {MatPaginator} from '@angular/material';
 import {FileInfoService} from "./file-info.service";
 import {FileSearchResult} from "./file-search-result";
 import {FileInfoDataSource} from "./file-info-data-source";
+import {FileInfo} from "./file-info";
+import * as FileSaver from "file-saver";
 
 @Component({
   selector: 'app-root',
@@ -39,5 +41,12 @@ export class AppComponent implements OnInit {
         }
       );
   }
+
+    download(file: FileInfo) {
+        this.fileInfoService.downloadFile(file)
+            .subscribe(
+                blob => FileSaver.saveAs(blob, file.fileName)
+            )
+    }
 
 }
