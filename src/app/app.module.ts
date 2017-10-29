@@ -5,7 +5,14 @@ import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {FileInfoService} from "./file-info.service";
-import {MatButtonModule, MatPaginatorModule, MatTableModule} from "@angular/material";
+import {
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTooltipModule
+} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
@@ -19,7 +26,10 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
         BrowserAnimationsModule,
         MatTableModule,
         MatPaginatorModule,
-        MatButtonModule
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatTooltipModule
     ],
     providers: [
         FileInfoService

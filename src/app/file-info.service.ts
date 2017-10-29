@@ -12,13 +12,14 @@ export class FileInfoService {
   constructor(private http: Http) {
   }
 
-  private fileInfoUrl = 'fileInfoes';
+    private fileInfoUrl = 'fileInfoes/search/findByFileNameContainingIgnoreCase';
     private downloadUrl = 'download/file/';
 
-  getFileInfos(pageNum: number): Observable<FileSearchResult> {
+    getFileInfos(pageNum: number, fileName = ""): Observable<FileSearchResult> {
     let params: URLSearchParams = new URLSearchParams();
     params.set('sort', 'fileName');
     params.set('page', String(pageNum));
+        params.set('name', '%' + fileName + '%');
     let options = new RequestOptions();
     options.params = params;
 

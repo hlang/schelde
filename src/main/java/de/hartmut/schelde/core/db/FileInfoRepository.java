@@ -16,7 +16,10 @@
 
 package de.hartmut.schelde.core.db;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -24,5 +27,7 @@ import java.util.Optional;
  * hartmut on 14.10.17.
  */
 public interface FileInfoRepository extends PagingAndSortingRepository<FileInfo, Long> {
-    Optional<FileInfo> findByFileName(String fileName);
+    Optional<FileInfo> findByFileName(@Param("name") String fileName);
+
+    Page<FileInfo> findByFileNameContainingIgnoreCase(@Param("name") String fileName, Pageable pageable);
 }
