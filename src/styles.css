@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.pointer {
+    cursor: pointer;
+}
+
+.title-img {
+    width: 200px;
+    height: auto;
+}
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.table-header {
+    min-height: 64px;
+    display: flex;
+    align-items: baseline;
+    padding: 8px 24px 0;
+    font-size: 20px;
+    justify-content: space-between;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    flex-grow: 1;
+    margin-left: 32px;
+}
+

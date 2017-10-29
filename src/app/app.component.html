@@ -1,0 +1,42 @@
+<div>
+    <img class="title-img" src="assets/schelde2.png">
+</div>
+<div class="table-container">
+    <div class="table-header">
+        <mat-form-field floatPlaceholder="auto">
+            <input matInput #filter placeholder="Filter files">
+        </mat-form-field>
+    </div>
+
+    <mat-table #table [dataSource]="fileInfoDs">
+
+        <ng-container matColumnDef="fileName">
+            <mat-header-cell *matHeaderCellDef>FileName</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.fileName}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="time">
+            <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.modTime | date:'MM.dd.y HH:mm:ss'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="size">
+            <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.fileSize}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Download">
+            <mat-header-cell *matHeaderCellDef>Download</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <a mat-mini-fab color="primary" class="pointer"
+                   (click)="download(row)"
+                   matTooltip="Download" matTooltipPosition="left">
+                    <span class="fa fa-download" aria-label="download"></span>
+                </a>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </mat-table>
+    <mat-paginator #paginator>
+    </mat-paginator>
+</div>
