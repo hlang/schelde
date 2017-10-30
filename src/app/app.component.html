@@ -10,14 +10,14 @@
         </mat-form-field>
     </div>
 
-    <mat-table #table [dataSource]="fileInfoDs">
+    <mat-table #table [dataSource]="fileInfoDs" matSort>
 
         <ng-container matColumnDef="fileName">
-            <mat-header-cell *matHeaderCellDef>FileName</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>FileName</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.fileName}}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="time">
-            <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Time</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.modTime | date:'dd.MM.y HH:mm:ss'}}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="size">

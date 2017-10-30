@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material';
+import {MatPaginator, MatSort} from '@angular/material';
 import {FileInfoService} from "./file-info.service";
 import {FileSearchResult} from "./file-search-result";
 import {FileInfoDataSource} from "./file-info-data-source";
@@ -22,24 +22,18 @@ export class AppComponent implements OnInit {
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('filter') filter: ElementRef;
+    @ViewChild(MatSort) sort: MatSort;
 
     ngOnInit() {
-        this.getFileInfos();
-        this.fileInfoDs = new FileInfoDataSource(this.fileInfoService, this.paginator, this.filter);
-    }
-
-    private getFileInfos(): void {
-        this.fileInfoService.getFileInfos(0)
-            .subscribe(searchResult => {
-                    this.searchResult = searchResult;
-                    this.paginator.length = searchResult.totalElements;
-                    this.paginator.pageSize = searchResult.size;
-                    this.paginator.pageIndex = searchResult.pageNumber;
-
-                },
-                response => {
-                }
-            );
+        this.sort.disableClear = true;
+        this.sort.direction = "asc";
+        this.sort.active = "fileName";
+        this.fileInfoDs =
+            new FileInfoDataSource(
+                this.fileInfoService,
+                this.paginator,
+                this.filter,
+                this.sort);
     }
 
     download(file: FileInfo) {

@@ -10,6 +10,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
+    MatSortModule,
     MatTableModule,
     MatTooltipModule
 } from "@angular/material";
@@ -29,7 +30,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
         MatButtonModule,
         MatInputModule,
         MatFormFieldModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatSortModule
     ],
     providers: [
         FileInfoService

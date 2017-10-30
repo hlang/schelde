@@ -5,7 +5,6 @@ import {FileSearchResult} from "./file-search-result";
 import "rxjs/add/operator/map";
 import {FileInfo} from "./file-info";
 
-
 @Injectable()
 export class FileInfoService {
 
@@ -15,12 +14,12 @@ export class FileInfoService {
     private fileInfoUrl = 'fileInfoes/search/findByFileNameContainingIgnoreCase';
     private downloadUrl = 'download/file/';
 
-    getFileInfos(pageNum: number, fileName = ""): Observable<FileSearchResult> {
+    getFileInfos(pageNum: number, fileName = "", sortField = "fileName", sortDirection = "asc"): Observable<FileSearchResult> {
         let params: URLSearchParams = new URLSearchParams();
         params.set('sort', 'fileName');
         params.set('page', String(pageNum));
         params.set('name', '%' + fileName + '%');
-        params.set('sort', 'modTime,desc');
+        params.set('sort', sortField + ',' + sortDirection);
         let options = new RequestOptions();
         options.params = params;
 
