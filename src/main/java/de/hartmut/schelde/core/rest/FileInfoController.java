@@ -57,6 +57,7 @@ public class FileInfoController {
         if (fileInfo == null) {
             ResponseEntity.notFound();
         }
+
         LOGGER.info("download: {}, {}", fileInfo.getId(), fileInfo.getFileName());
         Path filePath = Paths.get(fileInfo.getPath());
 

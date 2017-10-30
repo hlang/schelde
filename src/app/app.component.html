@@ -18,18 +18,18 @@
         </ng-container>
         <ng-container matColumnDef="time">
             <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.modTime | date:'MM.dd.y HH:mm:ss'}}</mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.modTime | date:'dd.MM.y HH:mm:ss'}}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="size">
             <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.fileSize}}</mat-cell>
+            <mat-cell *matCellDef="let row">{{row.fileSize}}</mat-cell>
         </ng-container>
-        <ng-container matColumnDef="Download">
+        <ng-container matColumnDef="download">
             <mat-header-cell *matHeaderCellDef>Download</mat-header-cell>
             <mat-cell *matCellDef="let row">
                 <a mat-mini-fab color="primary" class="pointer"
-                   (click)="download(row)"
-                   matTooltip="Download" matTooltipPosition="left">
+                   href="download/file/{{row.id}}"
+                   matTooltip="Download" matTooltipPosition="right">
                     <span class="fa fa-download" aria-label="download"></span>
                 </a>
             </mat-cell>

@@ -14,7 +14,7 @@ import * as FileSaver from "file-saver";
 export class AppComponent implements OnInit {
     title = 'Schelde!';
     searchResult: FileSearchResult | null;
-    displayedColumns = ['fileName', 'time', 'size', 'Download'];
+    displayedColumns = ['fileName', 'time', 'size', 'download'];
     fileInfoDs: FileInfoDataSource | null;
 
     constructor(private fileInfoService: FileInfoService) {

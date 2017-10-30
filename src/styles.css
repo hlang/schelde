@@ -5,6 +5,23 @@
     cursor: pointer;
 }
 
+.mat-column-size.mat-cell,
+.mat-column-size.mat-header-cell {
+    flex: 0 0 10%;
+    text-align: right;
+    padding-right: 5%;
+}
+
+.mat-column-download.mat-cell,
+.mat-column-download.mat-header-cell {
+    flex: 0 0 10%;
+}
+
+.mat-column-time.mat-cell,
+.mat-column-time.mat-header-cell {
+    flex: 0 0 20%;
+}
+
 .title-img {
     width: 200px;
     height: auto;
