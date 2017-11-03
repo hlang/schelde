@@ -27,7 +27,7 @@
         <ng-container matColumnDef="download">
             <mat-header-cell *matHeaderCellDef>Download</mat-header-cell>
             <mat-cell *matCellDef="let row">
-                <a mat-mini-fab color="primary" class="pointer"
+                <a mat-button class="download-fab"
                    href="download/file/{{row.id}}"
                    matTooltip="Download" matTooltipPosition="right">
                     <span class="fa fa-download" aria-label="download"></span>
@@ -36,7 +36,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="my-row"></mat-row>
 
     </mat-table>
     <mat-paginator #paginator>

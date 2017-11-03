@@ -1,8 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-.pointer {
+.download-fab {
     cursor: pointer;
+}
+
+.download-fab.mat-button {
+    padding: 0;
+    min-width: 40px;
+}
+
+.mat-cell {
+    font-family: 'Roboto Mono', Monospaced;
+    font-size: 14px;
+}
+
+.my-row.mat-row {
+    min-height: 30px;
 }
 
 .mat-column-size.mat-cell,
@@ -26,6 +40,7 @@
     width: 200px;
     height: auto;
 }
+
 .table-container {
     display: flex;
     flex-direction: column;

@@ -29,8 +29,11 @@ export class FileInfoDataSource extends DataSource<FileInfo> {
         let filterObservable = Observable.fromEvent(this.filter.nativeElement, 'keyup')
             .debounceTime(200)
             .distinctUntilChanged()
-            .do(() => this.paginator.pageIndex = 0);
-        Observable.merge(this.paginator.page, filterObservable, this.sort.sortChange)
+            .do(() => this.resetPage());
+        let pageObservable = this.paginator.page;
+        let sortObservable = this.sort.sortChange
+            .do(() => this.resetPage());
+        Observable.merge(pageObservable, filterObservable, sortObservable)
             .subscribe(() =>
                 this.getFileInfos(this.paginator.pageIndex,
                     this.filter.nativeElement.value,
@@ -49,6 +52,10 @@ export class FileInfoDataSource extends DataSource<FileInfo> {
                 this.subject.next(searchResult.fileInfos);
                 this.paginator.length = searchResult.totalElements;
             })
+    }
+
+    private resetPage() {
+        this.paginator.pageIndex = 0;
     }
 
     private getSortField(activeSort: string): string {
