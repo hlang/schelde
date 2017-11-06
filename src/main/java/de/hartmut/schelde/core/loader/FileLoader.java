@@ -60,7 +60,7 @@ public class FileLoader implements Runnable {
 
     @PostConstruct
     public void init() {
-        executorService.scheduleAtFixedRate(this,
+        executorService.scheduleWithFixedDelay(this,
                 5, config.getScanPeriodSeconds(), SECONDS);
     }
 
