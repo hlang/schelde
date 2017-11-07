@@ -1,43 +1,44 @@
 import {Injectable} from '@angular/core';
-import {Http, RequestOptions, Response, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs";
 import {FileSearchResult} from "./file-search-result";
 import "rxjs/add/operator/map";
+import {HttpClient, HttpParams} from "@angular/common/http";
 
 @Injectable()
 export class FileInfoService {
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
     }
 
     private fileInfoUrl = 'fileInfoes/search/findByFileNameContainingIgnoreCase';
-    private downloadUrl = 'download/file/';
 
     getFileInfos(pageNum: number, fileName = "", sortField = "fileName", sortDirection = "asc"): Observable<FileSearchResult> {
-        let params: URLSearchParams = new URLSearchParams();
-        params.set('sort', 'fileName');
-        params.set('page', String(pageNum));
-        params.set('name', '%' + fileName + '%');
-        params.set('sort', sortField + ',' + sortDirection);
-        let options = new RequestOptions();
-        options.params = params;
+        let params = new HttpParams()
+            .set('sort', 'fileName')
+            .set('page', String(pageNum))
+            .set('name', '%' + fileName + '%')
+            .set('sort', sortField + ',' + sortDirection);
 
-        return this.http.get(this.fileInfoUrl, options)
-            .map(res => this.extractData(res));
+        return this.http.get(this.fileInfoUrl, {
+            params: params
+        }).map(res => this.extractData(res));
 
     }
 
-    private extractData(res: Response): FileSearchResult {
-        let body = res.json();
-        let searchResult = new FileSearchResult();
-        if (body._embedded) {
-            searchResult.fileInfos = body._embedded.fileInfoes;
-            searchResult.totalElements = body.page.totalElements;
-            searchResult.size = body.page.size;
-            searchResult.totalPages = body.page.totalPages;
-            searchResult.pageNumber = body.page.number;
+    private extractData(response: Object): FileSearchResult {
+        let searchResult: FileSearchResult;
+        if (response['_embedded']) {
+            searchResult = {
+                fileInfos: response['_embedded'].fileInfoes,
+                totalElements: response['page'].totalElements,
+                size: response['page'].size,
+                totalPages: response['page'].totalPages,
+                pageNumber: response['page'].number
+            }
         } else {
-            searchResult.totalElements = 0;
+            searchResult = {
+                totalElements: 0
+            }
         }
 
         return searchResult;

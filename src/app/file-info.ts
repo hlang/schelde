@@ -1,4 +1,4 @@
-export class FileInfo {
+export interface FileInfo {
 
   fileName: string;
   fileSize: string;
