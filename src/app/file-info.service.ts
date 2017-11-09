@@ -16,7 +16,7 @@ export class FileInfoService {
         let params = new HttpParams()
             .set('sort', 'fileName')
             .set('page', String(pageNum))
-            .set('name', '%' + fileName + '%')
+            .set('name', fileName)
             .set('sort', sortField + ',' + sortDirection);
 
         return this.http.get(this.fileInfoUrl, {

@@ -30,9 +30,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -95,13 +94,13 @@ public class FileLoader implements Runnable {
                 if (Files.isDirectory(path)) {
                     fileInfos.addAll(scanDir(path));
                 }
-                if (Files.isRegularFile(path)) {
+                if (Files.isRegularFile(path) && !Files.isHidden(path)) {
                     LOGGER.trace("file: {}", path);
                     FileInfo fileInfo = new FileInfo();
                     fileInfo.setFileName(path.getFileName().toString());
                   fileInfo.setFileSize(Files.size(path));
                     fileInfo.setModTime(
-                            Timestamp.from(Files.getLastModifiedTime(path).toInstant()));
+                        Date.from(Files.getLastModifiedTime(path).toInstant()));
                     fileInfo.setPath(path.toAbsolutePath().toString());
                     fileInfos.add(fileInfo);
                 }
@@ -134,12 +133,12 @@ public class FileLoader implements Runnable {
     }
 
     private void addOrUpdate(FileInfo fileInfo) {
-        Optional<FileInfo> fileInfoOpt = fileInfoRepository.findByFileName(fileInfo.getFileName());
-        if (fileInfoOpt.isPresent()) {
-            FileInfo fileInfoExisting = fileInfoOpt.get();
+        FileInfo fileInfoExisting = fileInfoRepository.findByFileName(fileInfo.getFileName());
+        if (fileInfoExisting != null) {
             if (!fileInfoExisting.equals(fileInfo)) {
                 LOGGER.debug("addOrUpdate(): update {}", fileInfo.getFileName());
                 fileInfoExisting.setModTime(fileInfo.getModTime());
+                fileInfoExisting.setFileSize(fileInfo.getFileSize());
                 fileInfoRepository.save(fileInfoExisting);
             }
         } else {

@@ -16,82 +16,80 @@
 
 package de.hartmut.schelde.core.db;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.sql.Timestamp;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * hartmut on 14.10.17.
  */
 
-@Entity
+@Document
 public class FileInfo {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
-  private String fileName;
-  private Long fileSize;
-  private Timestamp modTime;
-  private String path;
+    @Id
+    private String id;
+    private String fileName;
+    private Long fileSize;
+    private Date modTime;
+    private String path;
 
-  public long getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getFileName() {
-    return fileName;
-  }
+    public String getFileName() {
+        return fileName;
+    }
 
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-  public Timestamp getModTime() {
-    return modTime;
-  }
+    public Date getModTime() {
+        return modTime;
+    }
 
-  public void setModTime(Timestamp modTime) {
-    this.modTime = modTime;
-  }
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
 
-  public String getPath() {
-    return path;
-  }
+    public String getPath() {
+        return path;
+    }
 
-  public void setPath(String path) {
-    this.path = path;
-  }
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-  public Long getFileSize() {
-    return fileSize;
-  }
+    public Long getFileSize() {
+        return fileSize;
+    }
 
-  public void setFileSize(Long fileSize) {
-    this.fileSize = fileSize;
-  }
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    FileInfo fileInfo = (FileInfo) o;
-    return Objects.equals(fileName, fileInfo.fileName) &&
-      Objects.equals(fileSize, fileInfo.fileSize) &&
-      Objects.equals(modTime, fileInfo.modTime) &&
-      Objects.equals(path, fileInfo.path);
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileInfo fileInfo = (FileInfo) o;
+        return Objects.equals(fileName, fileInfo.fileName) &&
+            Objects.equals(fileSize, fileInfo.fileSize) &&
+            Objects.equals(modTime, fileInfo.modTime) &&
+            Objects.equals(path, fileInfo.path);
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(fileName, fileSize, modTime, path);
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(fileName, fileSize, modTime, path);
+    }
 }
 

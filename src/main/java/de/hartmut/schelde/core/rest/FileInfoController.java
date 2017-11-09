@@ -52,7 +52,7 @@ public class FileInfoController {
     }
 
     @GetMapping("/file/{fileId}")
-    public ResponseEntity<Resource> downloadById(@PathVariable("fileId") Long fileId) throws IOException {
+    public ResponseEntity<Resource> downloadById(@PathVariable("fileId") String fileId) throws IOException {
         FileInfo fileInfo = fileInfoRepository.findOne(fileId);
         if (fileInfo == null) {
             ResponseEntity.notFound();

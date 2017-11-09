@@ -21,13 +21,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
-
 /**
  * hartmut on 14.10.17.
  */
-public interface FileInfoRepository extends PagingAndSortingRepository<FileInfo, Long> {
-    Optional<FileInfo> findByFileName(@Param("name") String fileName);
+public interface FileInfoRepository extends PagingAndSortingRepository<FileInfo, String> {
+    FileInfo findByFileName(@Param("name") String fileName);
 
     Page<FileInfo> findByFileNameContainingIgnoreCase(@Param("name") String fileName, Pageable pageable);
 }
