@@ -39,6 +39,6 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;" class="my-row"></mat-row>
 
     </mat-table>
-    <mat-paginator #paginator>
+    <mat-paginator #paginator [pageSize]="pageSize">
     </mat-paginator>
 </div>

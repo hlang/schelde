@@ -11,6 +11,8 @@ import {FileInfoDataSource} from "./file-info-data-source";
 })
 export class AppComponent implements OnInit {
     title = 'Schelde!';
+    pageSize = 20;
+    pageSizeOptions = [5, 10, 25, 100];
     searchResult: FileSearchResult | null;
     displayedColumns = ['fileName', 'time', 'size', 'download'];
     fileInfoDs: FileInfoDataSource | null;
