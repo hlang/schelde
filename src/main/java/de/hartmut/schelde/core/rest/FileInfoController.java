@@ -18,6 +18,8 @@ package de.hartmut.schelde.core.rest;
 
 import de.hartmut.schelde.core.db.FileInfo;
 import de.hartmut.schelde.core.db.FileInfoRepository;
+import de.hartmut.schelde.core.loader.FileEvent;
+import de.hartmut.schelde.core.loader.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * hartmut on 27.10.17.
@@ -45,19 +49,22 @@ public class FileInfoController {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileInfoController.class);
 
     private final FileInfoRepository fileInfoRepository;
+    private final FileService fileService;
 
     @Autowired
-    public FileInfoController(FileInfoRepository fileInfoRepository) {
+    public FileInfoController(FileInfoRepository fileInfoRepository, FileService fileService) {
         this.fileInfoRepository = fileInfoRepository;
+        this.fileService = fileService;
     }
 
     @GetMapping("/file/{fileId}")
     public ResponseEntity<Resource> downloadById(@PathVariable("fileId") String fileId) throws IOException {
-        FileInfo fileInfo = fileInfoRepository.findOne(fileId);
-        if (fileInfo == null) {
-            ResponseEntity.notFound();
+        Optional<FileInfo> fileInfoOpt = fileInfoRepository.findById(fileId);
+        if (!fileInfoOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
 
+        FileInfo fileInfo = fileInfoOpt.get();
         LOGGER.info("download: {}, {}", fileInfo.getId(), fileInfo.getFileName());
         Path filePath = Paths.get(fileInfo.getPath());
 
@@ -71,5 +78,10 @@ public class FileInfoController {
             .contentLength(fileInfo.getFileSize())
             .contentType(MediaType.parseMediaType("application/octet-stream"))
             .body(resource);
+    }
+
+    @GetMapping(value = "/file/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<FileEvent> streamFileEvents() {
+        return fileService.getEventFlux();
     }
 }

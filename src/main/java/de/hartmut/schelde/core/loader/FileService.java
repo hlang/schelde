@@ -21,11 +21,16 @@ import de.hartmut.schelde.core.db.FileInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * hartmut on 10.02.18.
@@ -35,9 +40,34 @@ public class FileService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileService.class);
 
     private final FileInfoRepository fileInfoRepository;
+    private Flux<FileEvent> eventFlux;
+    private List<FileEventListener> listeners = new ArrayList<>();
 
     public FileService(FileInfoRepository fileInfoRepository) {
         this.fileInfoRepository = fileInfoRepository;
+    }
+
+    @PostConstruct
+    public void init() {
+        LOGGER.debug("init()");
+        eventFlux = Flux.push(sink -> {
+            registerListener(new FileEventListener() {
+
+                @Override
+                public void onDataChunk(List<FileEvent> chunk) {
+                    chunk.forEach(event -> sink.next(event));
+                }
+
+                @Override
+                public void processComplete() {
+                    sink.complete();
+                }
+            });
+        });
+    }
+
+    private void registerListener(FileEventListener listener) {
+        listeners.add(listener);
     }
 
     public void addOrUpdate(Path path) {
@@ -70,14 +100,35 @@ public class FileService {
             LOGGER.debug("addOrUpdate(): add {}", fileInfo.getFileName());
             fileInfoRepository.save(fileInfo);
         }
+        publishEvent(fileInfo.getFileName());
     }
 
     public void removeFile(Path path) {
         LOGGER.debug("removeFile(): {}", path);
 
-        FileInfo fileInfo = fileInfoRepository.findByFileName(path.getFileName().toString());
+        String filename = path.getFileName().toString();
+        FileInfo fileInfo = fileInfoRepository.findByFileName(filename);
         if (fileInfo != null) {
             fileInfoRepository.delete(fileInfo);
+            publishEvent(filename);
         }
     }
+
+    private void publishEvent(String fileName) {
+        LOGGER.trace("publishEvent(): for {}", fileName);
+        FileEvent fileEvent = new FileEvent();
+        fileEvent.setFilename(fileName);
+        listeners.forEach(listener -> listener.onDataChunk(Collections.singletonList(fileEvent)));
+    }
+
+    public Flux<FileEvent> getEventFlux() {
+        return eventFlux;
+    }
+
+    private interface FileEventListener {
+        void onDataChunk(List<FileEvent> chunk);
+
+        void processComplete();
+    }
+
 }

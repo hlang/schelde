@@ -4,6 +4,8 @@ import {FileSearchResult} from "./file-search-result";
 import "rxjs/add/operator/map";
 import {HttpClient, HttpParams} from "@angular/common/http";
 
+declare var EventSource;
+
 @Injectable()
 export class FileInfoService {
 
@@ -23,6 +25,17 @@ export class FileInfoService {
             params: params
         }).map(res => this.extractData(res));
 
+    }
+
+    getFileInfoStream(): Observable<Object> {
+        return new Observable<Object>(obs => {
+            const es = new EventSource('/download/file/events');
+            es.addEventListener('message', (evt) => {
+                // console.log(evt.data);
+                obs.next(evt.data);
+            });
+            return () => es.close();
+        });
     }
 
     private extractData(response: Object): FileSearchResult {

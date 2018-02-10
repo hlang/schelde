@@ -33,7 +33,9 @@ export class FileInfoDataSource extends DataSource<FileInfo> {
         let pageObservable = this.paginator.page;
         let sortObservable = this.sort.sortChange
             .do(() => this.resetPage());
-        Observable.merge(pageObservable, filterObservable, sortObservable)
+        let fileEventObservable = this.fileInfoService.getFileInfoStream()
+            .debounceTime(200);
+        Observable.merge(pageObservable, filterObservable, sortObservable, fileEventObservable)
             .subscribe(() =>
                 this.getFileInfos(this.paginator.pageIndex,
                     this.filter.nativeElement.value,
