@@ -17,34 +17,34 @@
 package de.hartmut.schelde.core.loader;
 
 import de.hartmut.schelde.core.config.ScheldeConfig;
+import org.apache.commons.io.monitor.FileAlterationListener;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static java.nio.file.StandardWatchEventKinds.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
 
 /**
  * hartmut on 09.02.18.
  */
 @Component
-public class FileWatcher implements Runnable {
+public class FileWatcher implements FileAlterationListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileWatcher.class);
 
     private final ScheldeConfig config;
     private final FileService fileService;
+    private FileAlterationMonitor fileAlterationMonitor;
 
-    private Map<WatchKey, Path> watchKeys = new HashMap<>();
-    private WatchService watchService;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public FileWatcher(ScheldeConfig config, FileService fileService) {
         this.config = config;
@@ -59,10 +59,9 @@ public class FileWatcher implements Runnable {
     }
 
     @PreDestroy
-    public void shutdown() throws IOException {
+    public void shutdown() throws Exception {
         LOGGER.debug("shutdown()");
-        executorService.shutdown();
-        watchService.close();
+        fileAlterationMonitor.stop();
     }
 
     private void initDirs() {
@@ -81,61 +80,63 @@ public class FileWatcher implements Runnable {
     }
 
     private void startWatcher() {
+        fileAlterationMonitor = new FileAlterationMonitor(
+            Duration.ofSeconds(config.getScanPeriodSeconds()).toMillis());
+        for (String scanPath : config.getScanPaths()) {
+            LOGGER.debug("startWatcher(): for {}", scanPath);
+            FileAlterationObserver fileAlterationObserver = new FileAlterationObserver(scanPath);
+            fileAlterationMonitor.addObserver(fileAlterationObserver);
+            fileAlterationObserver.addListener(this);
+        }
         try {
-            watchService = FileSystems.getDefault().newWatchService();
-            for (String scanPath : config.getScanPaths()) {
-                LOGGER.debug("startWatcher(): for {}", scanPath);
-                Path path = Paths.get(scanPath);
-                WatchKey watchKey = path.register(watchService, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-                watchKeys.put(watchKey, path);
-            }
-            executorService.submit(this);
-        } catch (IOException ex) {
-            LOGGER.warn("init(): failed!", ex);
+            fileAlterationMonitor.start();
+        } catch (Exception ex) {
+            LOGGER.error("startWatcher(): failed!", ex);
         }
     }
 
     @Override
-    public void run() {
-        LOGGER.debug("run()");
-        for (; ; ) {
+    public void onStart(FileAlterationObserver fileAlterationObserver) {
+        LOGGER.trace("onStart()");
+    }
 
-            // wait for key to be signalled
-            WatchKey key;
-            try {
-                key = watchService.take();
-            } catch (InterruptedException x) {
-                return;
-            }
+    @Override
+    public void onDirectoryCreate(File file) {
+        LOGGER.trace("onDirectoryCreate(): {}", file);
+    }
 
-            Path path = watchKeys.get(key);
-            for (WatchEvent<?> event : key.pollEvents()) {
-                WatchEvent.Kind kind = event.kind();
+    @Override
+    public void onDirectoryChange(File file) {
+        LOGGER.trace("onDirectoryChange(): {}", file);
 
-                // TBD - provide example of how OVERFLOW event is handled
-                if (kind == OVERFLOW) {
-                    LOGGER.warn("run(): overflow detected!");
-                    continue;
-                }
+    }
 
-                // Context for directory entry event is the file name of entry
-                WatchEvent<Path> ev = (WatchEvent<Path>) event;
-                WatchEvent.Kind<Path> pathKind = ev.kind();
-                Path eventPath = path.resolve(ev.context());
-                LOGGER.debug("run(): event {} for {}", pathKind, eventPath);
-                if (pathKind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-                    fileService.removeFile(eventPath);
-                } else {
-                    fileService.addOrUpdate(eventPath);
-                }
-            }
+    @Override
+    public void onDirectoryDelete(File file) {
+        LOGGER.trace("onDirectoryDelete(): {}", file);
+    }
 
-            // reset key and remove from set if directory no longer accessible
-            boolean valid = key.reset();
-            if (!valid) {
-                LOGGER.warn("run(): key reset is invalid!");
-                break;
-            }
-        }
+    @Override
+    public void onFileCreate(File file) {
+        LOGGER.debug("onFileCreate(): {}", file);
+        fileService.addOrUpdate(file.toPath());
+    }
+
+    @Override
+    public void onFileChange(File file) {
+        LOGGER.debug("onFileChange(): {}", file);
+        fileService.addOrUpdate(file.toPath());
+    }
+
+    @Override
+    public void onFileDelete(File file) {
+        LOGGER.debug("onFileDelete(): {}", file);
+        fileService.removeFile(file.toPath());
+    }
+
+    @Override
+    public void onStop(FileAlterationObserver fileAlterationObserver) {
+        LOGGER.trace("onStop()");
+
     }
 }
