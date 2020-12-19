@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Hartmut Lang
+ * Copyright (c) 2020. Hartmut Lang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,20 @@
 
 package de.hartmut.schelde.core.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
  * hartmut on 14.10.17.
  */
 @Component
+@Data
 @ConfigurationProperties(prefix = "schelde")
 public class ScheldeConfig {
-    private Long scanPeriodSeconds = 120L;
+    private Duration scanPeriod = Duration.ofSeconds(120);
     private List<String> scanPaths;
-
-    public Long getScanPeriodSeconds() {
-        return scanPeriodSeconds;
-    }
-
-    public void setScanPeriodSeconds(Long scanPeriodSeconds) {
-        this.scanPeriodSeconds = scanPeriodSeconds;
-    }
-
-    public List<String> getScanPaths() {
-        return scanPaths;
-    }
-
-    public void setScanPaths(List<String> scanPaths) {
-        this.scanPaths = scanPaths;
-    }
 }

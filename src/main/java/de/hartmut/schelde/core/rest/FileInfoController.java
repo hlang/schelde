@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Hartmut Lang
+ * Copyright (c) 2020. Hartmut Lang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public class FileInfoController {
 
     @GetMapping("/file/{fileId}")
     public ResponseEntity<Resource> downloadById(@PathVariable("fileId") String fileId) throws IOException {
-        Optional<FileInfo> fileInfoOpt = fileInfoRepository.findById(fileId);
+        Optional<FileInfo> fileInfoOpt = fileInfoRepository.findByDigest(fileId);
         if (!fileInfoOpt.isPresent()) {
             return ResponseEntity.notFound().build();
         }

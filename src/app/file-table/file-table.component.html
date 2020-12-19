@@ -1,0 +1,39 @@
+<div class="table-container">
+    <div class="table-header">
+        <mat-form-field floatLabel="auto">
+            <input matInput #filter placeholder="Filter files" [formControl]="fileNameControl">
+        </mat-form-field>
+    </div>
+
+    <mat-table #table [dataSource]="fileInfoSubject" matSort matSortActive="fileName" (matSortChange)="sortEvent()">
+
+        <ng-container matColumnDef="fileName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header start="asc">FileName</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.fileName}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="time">
+            <mat-header-cell *matHeaderCellDef mat-sort-header start="desc">Time</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.modTime | date:'dd.MM.y HH:mm:ss'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="size">
+            <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.fileSize}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="download">
+            <mat-header-cell *matHeaderCellDef>Info</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <a mat-button class="download-fab"
+                   [routerLink]="['/file', row.digest]"
+                   matTooltip="Info" matTooltipPosition="right">
+                    <span class="fa fa-info-circle"></span>
+                </a>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="file-row" [routerLink]="['/file', row.digest]"></mat-row>
+
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="pageSize" (page)="pageEvent()">
+    </mat-paginator>
+</div>

@@ -1,0 +1,14 @@
+<a mat-button class="back-arrow" [routerLink]="['/files']">
+    <i class="fa fa-arrow-circle-left"></i>
+</a>
+<mat-card class="example-card" *ngIf="fileInfo">
+    <mat-card-header>
+        <mat-card-title>{{fileInfo.fileName}}
+            <button mat-button [cdkCopyToClipboard]="getCurrentUrl()" matTooltip="Copy Link" matTooltipPosition="above"><i class="fa fa-link"></i></button>
+        </mat-card-title>
+        <mat-card-subtitle>{{fileInfo.modTime | date:'dd.MM.y HH:mm:ss'}}, Size: {{fileInfo.fileSize}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+        <a mat-button matTooltip="Download" matTooltipPosition="above" href="download/file/{{fileInfo.digest}}"><i class="fa fa-download"></i></a>
+    </mat-card-actions>
+</mat-card>
