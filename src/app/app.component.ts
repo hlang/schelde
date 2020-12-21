@@ -1,8 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort} from '@angular/material';
-import {FileInfoService} from "./file-info.service";
-import {FileSearchResult} from "./file-search-result";
-import {FileInfoDataSource} from "./file-info-data-source";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
     selector: 'app-root',
@@ -11,30 +7,10 @@ import {FileInfoDataSource} from "./file-info-data-source";
 })
 export class AppComponent implements OnInit {
     title = 'Schelde!';
-    pageSize = 20;
-    pageSizeOptions = [5, 10, 25, 100];
-    searchResult: FileSearchResult | null;
-    displayedColumns = ['fileName', 'time', 'size', 'download'];
-    fileInfoDs: FileInfoDataSource | null;
 
-    constructor(private fileInfoService: FileInfoService) {
+    constructor() {
     }
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild('filter') filter: ElementRef;
-    @ViewChild(MatSort) sort: MatSort;
-
-    ngOnInit() {
-        this.sort.disableClear = true;
-        this.sort.direction = "asc";
-        this.sort.active = "fileName";
-        this.fileInfoDs =
-            new FileInfoDataSource(
-                this.fileInfoService,
-                this.paginator,
-                this.filter,
-                this.sort);
+    ngOnInit(): void {
     }
-
-
 }

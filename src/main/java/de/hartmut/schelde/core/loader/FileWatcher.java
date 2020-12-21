@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Hartmut Lang
+ * Copyright (c) 2020. Hartmut Lang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,8 +80,7 @@ public class FileWatcher implements FileAlterationListener {
     }
 
     private void startWatcher() {
-        fileAlterationMonitor = new FileAlterationMonitor(
-            Duration.ofSeconds(config.getScanPeriodSeconds()).toMillis());
+        fileAlterationMonitor = new FileAlterationMonitor(config.getScanPeriod().toMillis());
         for (String scanPath : config.getScanPaths()) {
             LOGGER.debug("startWatcher(): for {}", scanPath);
             FileAlterationObserver fileAlterationObserver = new FileAlterationObserver(scanPath);

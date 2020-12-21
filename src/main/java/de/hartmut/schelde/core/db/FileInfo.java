@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Hartmut Lang
+ * Copyright (c) 2020. Hartmut Lang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@
 
 package de.hartmut.schelde.core.db;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
 
@@ -26,70 +29,17 @@ import java.util.Objects;
  * hartmut on 14.10.17.
  */
 
-@Document
+@Data
+@Entity
 public class FileInfo {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
+    private String digest;
     private String fileName;
     private Long fileSize;
     private Date modTime;
     private String path;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public Date getModTime() {
-        return modTime;
-    }
-
-    public void setModTime(Date modTime) {
-        this.modTime = modTime;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public Long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(Long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FileInfo fileInfo = (FileInfo) o;
-        return Objects.equals(fileName, fileInfo.fileName) &&
-            Objects.equals(fileSize, fileInfo.fileSize) &&
-            Objects.equals(modTime, fileInfo.modTime) &&
-            Objects.equals(path, fileInfo.path);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(fileName, fileSize, modTime, path);
-    }
 }
 

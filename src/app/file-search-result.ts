@@ -1,7 +1,7 @@
 import {FileInfo} from "./file-info";
 
 export interface FileSearchResult {
-    fileInfos?: Array<FileInfo>;
+    fileInfos?: FileInfo[];
     size?: number;
   totalElements: number;
     totalPages?: number;

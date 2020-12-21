@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Hartmut Lang
+ * Copyright (c) 2020. Hartmut Lang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 /**
  * hartmut on 14.10.17.
  */
 public interface FileInfoRepository extends PagingAndSortingRepository<FileInfo, String> {
-    FileInfo findByFileName(@Param("name") String fileName);
+    Optional<FileInfo> findByFileName(@Param("name") String fileName);
+    Optional<FileInfo> findByDigest(String digest);
 
     Page<FileInfo> findByFileNameContainingIgnoreCase(@Param("name") String fileName, Pageable pageable);
 }

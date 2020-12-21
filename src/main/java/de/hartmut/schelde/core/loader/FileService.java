@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Hartmut Lang
+ * Copyright (c) 2020. Hartmut Lang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,19 @@ import de.hartmut.schelde.core.db.FileInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import reactor.core.publisher.Flux;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * hartmut on 10.02.18.
@@ -74,12 +77,14 @@ public class FileService {
         LOGGER.debug("addOrUpdate(): {}", path);
         try {
             if (Files.isRegularFile(path) && !Files.isHidden(path)) {
+                String md5Digest = DigestUtils.md5DigestAsHex(path.toAbsolutePath().toString().getBytes(StandardCharsets.UTF_8));
                 FileInfo fileInfo = new FileInfo();
                 fileInfo.setFileName(path.getFileName().toString());
                 fileInfo.setFileSize(Files.size(path));
                 fileInfo.setModTime(
                     Date.from(Files.getLastModifiedTime(path).toInstant()));
                 fileInfo.setPath(path.toAbsolutePath().toString());
+                fileInfo.setDigest(md5Digest);
                 addOrUpdate(fileInfo);
             }
         } catch (IOException ex) {
@@ -88,8 +93,9 @@ public class FileService {
     }
 
     private void addOrUpdate(FileInfo fileInfo) {
-        FileInfo fileInfoExisting = fileInfoRepository.findByFileName(fileInfo.getFileName());
-        if (fileInfoExisting != null) {
+        Optional<FileInfo> fileInfoOpt = fileInfoRepository.findByFileName(fileInfo.getFileName());
+        if (fileInfoOpt.isPresent()) {
+            FileInfo fileInfoExisting = fileInfoOpt.get();
             if (!fileInfoExisting.equals(fileInfo)) {
                 LOGGER.debug("addOrUpdate(): update {}", fileInfo.getFileName());
                 fileInfoExisting.setModTime(fileInfo.getModTime());
@@ -107,9 +113,9 @@ public class FileService {
         LOGGER.debug("removeFile(): {}", path);
 
         String filename = path.getFileName().toString();
-        FileInfo fileInfo = fileInfoRepository.findByFileName(filename);
-        if (fileInfo != null) {
-            fileInfoRepository.delete(fileInfo);
+        Optional<FileInfo> fileInfoOpt = fileInfoRepository.findByFileName(filename);
+        if (fileInfoOpt.isPresent()) {
+            fileInfoRepository.delete(fileInfoOpt.get());
             publishEvent(filename);
         }
     }

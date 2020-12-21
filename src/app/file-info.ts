@@ -1,5 +1,5 @@
 export interface FileInfo {
-
+  digest: string;
   fileName: string;
   fileSize: string;
   modTime: string;
