@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {AppInfo, AppInfoService} from "./app-info.service";
 
 @Component({
     selector: 'app-root',
@@ -7,10 +8,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class AppComponent implements OnInit {
     title = 'Schelde!';
+    appInfo: AppInfo;
 
-    constructor() {
+    constructor(private appInfoServer: AppInfoService) {
     }
 
     ngOnInit(): void {
+        this.appInfoServer.getAppInfo()
+            .subscribe(appInfo => this.appInfo = appInfo)
     }
 }

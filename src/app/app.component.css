@@ -1,4 +1,12 @@
-
+.app-header {
+    display: flex;
+    align-items: flex-start;
+}
+.app-version {
+    margin-left: 5px;
+    font-family: 'Roboto Mono', Monospaced, sans-serif;
+    font-size: 10px;
+}
 .title-img {
     width: 200px;
     height: auto;
