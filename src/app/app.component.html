@@ -1,7 +1,7 @@
-<div>
+<div class="app-header">
     <a href="https://github.com/hlang/schelde" target="_blank">
         <img class="title-img" src="assets/schelde2.png">
     </a>
+    <span class="app-version" *ngIf="appInfo">v{{appInfo.app.version}}</span>
 </div>
 <router-outlet></router-outlet>
-

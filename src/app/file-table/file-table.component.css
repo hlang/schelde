@@ -12,7 +12,7 @@
 }
 
 .mat-cell {
-    font-family: 'Roboto Mono', Monospaced;
+    font-family: 'Roboto Mono', Monospaced, sans-serif;
     font-size: 14px;
 }
 

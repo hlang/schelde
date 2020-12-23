@@ -1,14 +1,14 @@
 {
-  "/fileInfoes": {
-    "target": "http://localhost:8080",
-    "secure": false
-  },
-  "/info": {
-    "target": "http://localhost:8080",
-    "secure": false
-  },
+    "/fileInfoes": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+    "/actuator/*": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
     "/download/*": {
         "target": "http://localhost:8080",
         "secure": false
-  }
+    }
 }
